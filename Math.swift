@@ -26,6 +26,10 @@ func swapValues<T>(inout a: T, inout b: T) {
     b = temp
 }
 
+func clamp<T:Comparable>(value:T, lowerBound:T, upperBound:T) -> T {
+    return min(max(lowerBound, value), upperBound)
+}
+
 struct Matrix4x4 {
     
     var m01:Float32 = 1
@@ -175,7 +179,8 @@ func matrix44MakeOrtho(left: Float32, right: Float32, bottom: Float32, top: Floa
     let fan = farZ + nearZ;
     let fsn = farZ - nearZ;
     
-    var m = [ 2.0 / rsl, 0.0, 0.0, 0.0,
+    var m00 = 2.0 / rsl
+    var m = [ m00, 0.0, 0.0, 0.0,
               0.0, 2.0 / tsb, 0.0, 0.0,
               0.0, 0.0, -2.0 / fsn, 0.0,
               -ral / rsl, -tab / tsb, -fan / fsn, 1.0]

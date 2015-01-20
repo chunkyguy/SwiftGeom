@@ -36,6 +36,16 @@ struct Vector2 {
         x = other.x
         y = other.y
     }
+    
+    init(point:CGPoint) {
+        x = Float32(point.x)
+        y = Float32(point.y)
+    }
+
+    init(size:CGSize) {
+        x = Float32(size.width)
+        y = Float32(size.height)
+    }
 }
 
 extension Vector2: Printable {
@@ -69,9 +79,14 @@ extension Vector2 : Equatable {
         }
     }
     
+    func magnitudeSquared() -> Float32 {
+        
+        return x*x + y*y
+    }
+
     func magnitude() -> Float32 {
         
-        return sqrtf( x*x + y*y )
+        return sqrtf(magnitudeSquared())
     }
     
     func dot( v: Vector2 ) -> Float32 {
@@ -86,11 +101,37 @@ extension Vector2 : Equatable {
         x = result.x
         y = result.y
     }
+    
 }
 
 func ==(lhs: Vector2, rhs: Vector2) -> Bool {
 
     return (lhs.x == rhs.x) && (lhs.y == rhs.y)
+}
+
+func < (lhs: Vector2, rhs: Vector2) -> Bool {
+    
+    return (lhs.x < rhs.x) && (lhs.y < rhs.y)
+}
+
+func !=(lhs: Vector2, rhs: Vector2) -> Bool {
+    
+    return !(lhs == rhs)
+}
+
+func <= (lhs: Vector2, rhs: Vector2) -> Bool {
+    
+    return (lhs < rhs) || (lhs == rhs)
+}
+
+func > (lhs: Vector2, rhs: Vector2) -> Bool {
+    
+    return !(lhs <= rhs);
+}
+
+func >= (lhs: Vector2, rhs: Vector2) -> Bool {
+    
+    return (lhs > rhs) || (lhs == rhs)
 }
 
 func * (left: Vector2, right : Float32) -> Vector2 {
@@ -153,3 +194,33 @@ func /= (inout left: Vector2, right: Vector2) {
     left = left / right
 }
 
+func min(lhs: Vector2, rhs: Vector2) -> Vector2 {
+    
+    return Vector2(x: min(lhs.x, rhs.x), y: min(lhs.y, rhs.y))
+}
+
+func max(lhs: Vector2, rhs: Vector2) -> Vector2 {
+    
+    return Vector2(x: max(lhs.x, rhs.x), y: max(lhs.y, rhs.y))
+}
+
+func clamp(value:Vector2, lowerBound:Vector2, upperBound:Vector2) -> Vector2 {
+    return min(max(lowerBound, value), upperBound)
+}
+
+extension Vector2 : Comparable {}
+
+/* conversions */
+extension CGPoint {
+    init(vec2:Vector2) {
+        self.x = CGFloat(vec2.x)
+        self.y = CGFloat(vec2.y)
+    }
+}
+
+extension CGSize {
+    init(vec2:Vector2) {
+        self.width = CGFloat(vec2.x)
+        self.height = CGFloat(vec2.y)
+    }
+}
